@@ -233,12 +233,18 @@ namespace Plater
         }
 
         char *buffer = new char[pattern.size()+64];
+        ofstream ofile("transforms.csv");
+        ofile << "plate,file,x,y,rot" << endl;
         for (int i=0; i<solution->countPlates(); i++) {
             Plate *plate = solution->getPlate(i);
             int plateNumber = i+1;
             snprintf(buffer, pattern.size()+63, pattern.c_str(), plateNumber);
             _log("- Exporting %s...\n", buffer);
             generatedFiles.push_back(string(buffer));
+
+            for (auto part : plate->parts) {
+              ofile <<  string(buffer) << "," << part->getName() << "," << part->getCenterX()/1000<< "," << part->getCenterY() /1000 << "," << part->getRotation() << endl;
+            }
 
             switch (mode) {
                 case REQUEST_STL:
@@ -249,6 +255,7 @@ namespace Plater
                     break;
             }
         }
+        ofile.close();
         delete[] buffer;
     }
 

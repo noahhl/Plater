@@ -6,3 +6,7 @@ gui/Plater
 **.o
 **.swp
 build
+*.stl
+*.ppm
+transforms.csv
+*.conf
